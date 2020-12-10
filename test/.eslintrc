@@ -1,0 +1,4 @@
+{
+	"extends": ["niksy/tests"],
+	"ignorePatterns": ["/**/fixtures"]
+}
