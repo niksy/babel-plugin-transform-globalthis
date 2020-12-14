@@ -14,5 +14,9 @@ async function runTest(testCase, options = {}) {
 }
 
 it('should transform `globalThis`', function () {
-	return runTest('input');
+	return runTest('all');
+});
+
+it('shouldn’t add helpers when not needed', function () {
+	return runTest('empty');
 });

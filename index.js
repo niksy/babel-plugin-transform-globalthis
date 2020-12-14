@@ -1,10 +1,4 @@
 const GLOBAL_THIS = 'globalThis';
-const globalThisPatterns = [
-	'window.globalThis',
-	'self.globalThis',
-	'global.globalThis',
-	'globalThis'
-];
 
 const globalThisCodeString = `
 var GLOBAL_THIS = (function (Object) {
@@ -29,19 +23,6 @@ var GLOBAL_THIS = (function (Object) {
 })(Object);
 `;
 
-function isGlobalThisExpression(path) {
-	const object = path.get('object');
-	const property = path.get('property');
-	if (
-		object.isThisExpression() &&
-		((property.isIdentifier() && property.node.name === GLOBAL_THIS) ||
-			(property.isStringLiteral() && property.node.value === GLOBAL_THIS))
-	) {
-		return true;
-	}
-	return globalThisPatterns.some((query) => path.matchesPattern(query));
-}
-
 export default ({ types: t, template }) => {
 	return {
 		visitor: {
@@ -63,29 +44,18 @@ export default ({ types: t, template }) => {
 					path.node.body.unshift(object);
 				}
 			},
-			MemberExpression(path, { file }) {
-				if (!isGlobalThisExpression(path)) {
-					return;
-				}
-				if (!file.get(GLOBAL_THIS)) {
-					file.set(
-						GLOBAL_THIS,
-						path.scope.generateUidIdentifier(GLOBAL_THIS)
-					);
-				}
-				path.replaceWith(file.get(GLOBAL_THIS));
-			},
 			Identifier(path, { file }) {
 				if (path.node.name !== GLOBAL_THIS) {
 					return;
 				}
-				const isMemberExpressionAlreadyReplaced = path.findParent(
-					(path) =>
-						path.isMemberExpression() &&
-						file.get(GLOBAL_THIS) &&
-						path.matchesPattern(file.get(GLOBAL_THIS).name, true)
+				const memberExpression = path.findParent((path) =>
+					path.isMemberExpression()
 				);
-				if (!isMemberExpressionAlreadyReplaced) {
+				if (
+					(memberExpression &&
+						memberExpression.get('object') === path) ||
+					!memberExpression
+				) {
 					if (!file.get(GLOBAL_THIS)) {
 						file.set(
 							GLOBAL_THIS,
