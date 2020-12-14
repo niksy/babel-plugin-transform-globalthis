@@ -38,8 +38,8 @@ var _globalThis = {};
 _globalThis.becky;
 ```
 
-Check test fixtures ([actual](test/fixtures/input.js) and
-[expected](test/fixtures/input.expected.js)) for more examples.
+Check test fixtures ([actual](test/fixtures/all.js) and
+[expected](test/fixtures/all.expected.js)) for more examples.
 
 ## Acknowledgments
 
