@@ -56,5 +56,6 @@ MIT © [Ivan Nikolić](http://ivannikolic.com)
 
 [ci]: https://travis-ci.com/niksy/babel-plugin-transform-globalthis
 [ci-img]: https://travis-ci.com/niksy/babel-plugin-transform-globalthis.svg?branch=master
+[babel-plugins]: http://babeljs.io/docs/plugins/
 
 <!-- prettier-ignore-end -->
